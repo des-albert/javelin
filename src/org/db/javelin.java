@@ -42,14 +42,14 @@ public class javelin {
     static HashMap<Integer, Part> partHashMap = new HashMap<>();
     static HashMap<Integer, Slot> slotHashMap = new HashMap<>();
     static HashMap<Integer, TreeItem<Object>> buildHashMap = new HashMap<>();
-    private HashMap<String, TreeItem<Object>> catHashMap = new HashMap<>();
+    private final HashMap<String, TreeItem<Object>> catHashMap = new HashMap<>();
     private TreeItem<Object> partTreeRootItem, buildTreeRootItem;
     private DataFormat dfPart, dfSlot, dfBuild, dfParentPart, dfParentSlot;
 
     static TreeItem<Object> selectedTreeItem;
-    private ContextMenu partContext = new ContextMenu();
-    private ContextMenu folderContext = new ContextMenu();
-    private ContextMenu quantityContext = new ContextMenu();
+    private final ContextMenu partContext = new ContextMenu();
+    private final ContextMenu folderContext = new ContextMenu();
+    private final ContextMenu quantityContext = new ContextMenu();
 
     @FXML
     private void partDragDetected(MouseEvent event) {
@@ -872,7 +872,7 @@ public class javelin {
             buildPart part;
             buildSlot slot;
             while ((line = br.readLine()) != null && line.length() != 0) {
-                if (line.substring(2, 6).equals("code")) {
+                if (line.startsWith("code", 2)) {
                     part = gson.fromJson(line, buildPart.class);
 
                     if (part.getCode().equals("build")) {

@@ -1,5 +1,6 @@
 package org.db;
 
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,10 +15,9 @@ public class javelinMain extends Application {
         return javelinMain.primaryStage;
     }
 
-    @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("javelin.fxml"));
-        primaryStage.setTitle("Connect");
+        primaryStage.setTitle("Javelin");
         primaryStage.setScene(new Scene(root, 1200, 850));
         Image icon = new Image(getClass().getResourceAsStream("/img/javelin.png"));
         primaryStage.getIcons().add(icon);

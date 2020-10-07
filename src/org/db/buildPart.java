@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 public class buildPart implements Serializable {
 
-    private String code;
-    private String description;
-    private String category;
-    private ArrayList<String> slots;
+    private final String code;
+    private final String description;
+    private final String category;
+    private final ArrayList<String> slots;
 
-    private int id;
+    private final int id;
     private int parentId;
     private int buildCount;
     private int totalCount;

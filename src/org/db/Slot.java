@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 public class Slot implements Serializable {
 
-    private int id;
-    private String name;
-    private String type;
-    private int quantity;
-    private String description;
-    private ArrayList<String> parts;
+    private final int id;
+    private final String name;
+    private final String type;
+    private final int quantity;
+    private final String description;
+    private final ArrayList<String> parts;
 
     Slot(String name, String type, int quantity, String description, ArrayList<String> parts) {
         this.id = name.hashCode();
