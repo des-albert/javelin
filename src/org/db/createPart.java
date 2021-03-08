@@ -41,10 +41,9 @@ public class createPart {
 
         ArrayList<String> slots = new ArrayList<>();
         Part newPart = new Part(code, description, category, hint, slots);
-        if (partHashMap.containsKey(code)) {
+        if (partHashMap.containsKey(newPart.hashCode())) {
             labelAddStatus.setText("Duplicate part code " + code);
             labelAddStatus.setStyle("-fx-text-fill: status-error-color");
-            return;
         } else {
             partHashMap.put(code.hashCode(), newPart);
             labelAddStatus.setText("New Part " + code + " - " + description + " created");

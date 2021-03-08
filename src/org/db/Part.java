@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 public class Part implements Serializable {
 
-    private int id;
-    private String code;
-    private String description;
-    private String category;
-    private String hint;
-    private ArrayList<String> slots;
+    private final int id;
+    private final String code;
+    private final String description;
+    private final String category;
+    private final String hint;
+    private final ArrayList<String> slots;
 
     Part(String code, String description, String category, String hint, ArrayList<String> slots) {
         this.id = code.hashCode();
