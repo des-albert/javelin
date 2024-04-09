@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<TabPane fx:id="tabPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750" prefWidth="1200" styleClass="root" stylesheets="@../../css/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.db.javelin">
+    <Tab text="Main">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="814.0" prefWidth="1200.0" stylesheets="@../../css/style.css">
+            <Button fx:id="buttonQuit" alignment="CENTER" contentDisplay="CENTER" layoutX="570.0" layoutY="41.0" mnemonicParsing="false" onAction="#ButtonQuitOnAction" prefHeight="39.0" prefWidth="65.0" stylesheets="@../../css/style.css" text="Quit" textAlignment="CENTER">
+                <font>
+                    <Font name="Ink Free" size="14.0" />
+                </font>
+            </Button>
+            <ImageView fx:id="imageViewTrash" fitHeight="96.0" fitWidth="153.0" layoutX="555.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../img/trash.png" />
+            </ImageView>
+            <TreeView fx:id="treeViewPart" layoutX="43.0" layoutY="25.0" onDragDetected="#partDragDetected" prefHeight="660.0" prefWidth="500" stylesheets="@../../css/treeview.css" />
+            <TreeView fx:id="treeViewBuild" layoutX="660.0" layoutY="25.0" onDragDetected="#buildDragDetected" prefHeight="660.0" prefWidth="500" stylesheets="@../../css/treeview.css" />
+            <Label fx:id="labelStatus" layoutX="43.0" layoutY="690.0" prefHeight="17.0" prefWidth="502.0" />
+
+            <ToggleButton fx:id="togglePart" layoutX="476.0" layoutY="32.0" mnemonicParsing="false" onAction="#ButtonPartCollapseOnAction" stylesheets="@../../css/style.css" text="Expand" />
+
+            <ToggleButton fx:id="toggleBuild" layoutX="1093.0" layoutY="32.0" mnemonicParsing="false" onAction="#ButtonBuildCollapseOnAction" stylesheets="@../../css/style.css" text="Expand" textAlignment="CENTER" />
+
+
+        </AnchorPane>
+    </Tab>
+    <Tab text="Files">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <Button layoutX="130.0" layoutY="78.0" mnemonicParsing="false" onAction="#ButtonExportOnAction" prefHeight="44.0" prefWidth="143.0" text="export">
+                <font>
+                    <Font size="14.0" />
+                </font>
+            </Button>
+            <ImageView fitHeight="186.0" fitWidth="578.0" layoutX="130.0" layoutY="486.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@../../img/javelin.gif" />
+            </ImageView>
+            <Button layoutX="421.0" layoutY="81.0" mnemonicParsing="false" onAction="#ButtonSaveConfigOnAction" prefHeight="15.0" prefWidth="125.0" text="save" />
+            <Button layoutX="421.0" layoutY="136.0" mnemonicParsing="false" onAction="#ButtonLoadConfigOnAction" prefHeight="45.0" prefWidth="124.0" text="load" />
+        </AnchorPane>
+    </Tab>
+    <Tab text="About">
+        <AnchorPane>
+            <Label fx:id="labelJDK" layoutX="104.0" layoutY="70.0" prefHeight="17.0" prefWidth="342.0" styleClass="label-plain" stylesheets="@../../css/style.css" text="Java SDK" />
+            <Label fx:id="labelJavaFX" layoutX="104.0" layoutY="113.0" prefHeight="17.0" prefWidth="282.0" styleClass="label-plain" stylesheets="@../../css/style.css" text="JavaFX" />
+        </AnchorPane>
+
+    </Tab>
+</TabPane>
