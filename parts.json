@@ -1,113 +1,69 @@
 [
   {
-    "id": -1897067011,
-    "code": "R4K50A",
-    "description": "Slingshot L0 Cable A",
-    "category": "slingshot",
-    "hint": "compute blade L0 Cable",
+    "id": -520031261,
+    "code": "P64986-H21",
+    "description": "HPE 64GB Dual Rank x4 DDR5-6400 Smart Memory Kit",
+    "category": "DDR5-6400 DIMM",
+    "hint": "64 GB DIMM",
     "slots": []
   },
   {
-    "id": -1897066980,
-    "code": "R4K51A",
-    "description": "Slingshot L0 Cable B",
-    "category": "slingshot",
-    "hint": "",
+    "id": -890353251,
+    "code": "P73357-B21",
+    "description": "AMD EPYC 9655 2.6GHz 96-core 400W Processor for HPE",
+    "category": "AMD Turin CPU",
+    "hint": "AMD 9655 96c 2.6G 400W",
     "slots": []
   },
   {
-    "id": -1897068840,
-    "code": "R4K33A",
-    "description": "AMD 8 socket 4 Node Blade",
-    "category": "compute blade",
-    "hint": "requires cpu, memory and slingshot",
+    "id": -888506209,
+    "code": "P73359-B21",
+    "description": "AMD EPYC 9535 2.4GHz 64-core 300W Processor for HPE",
+    "category": "AMD Turin CPU",
+    "hint": "AMD 9635 64c 2.4G 300W",
+    "slots": []
+  },
+  {
+    "id": -868188747,
+    "code": "P73360-B21",
+    "description": "AMD EPYC 9555 3.2GHz 64-core 360W Processor for HPE",
+    "category": "AMD Turin CPU",
+    "hint": "9555 64c 3.3G 360W",
+    "slots": []
+  },
+  {
+    "id": -1868225293,
+    "code": "S4R96A",
+    "description": "HPE ProLiant Compute XD685 Direct Liquid Cooling Server",
+    "category": "HPE Proliant Compute XD685 Servers",
+    "hint": "AMD 9655",
     "slots": [
-      "AMD 8 CPU",
-      "64 x DDR4 3200 MHz",
-      "slingshot dual mezzanine card",
-      "compute blade L0 Cable A",
-      "compute blade L0 Cable B"
+      "Turin CPUs",
+      "DDR5-6400 DIMMs"
     ]
   },
   {
-    "id": -1895135153,
-    "code": "R6N08A",
-    "description": "64GB DDR4-3200 2RX4",
-    "category": "DDR4 3200 MHz",
-    "hint": "",
+    "id": -518184219,
+    "code": "P64988-H21",
+    "description": "HPE 128GB Dual Rank x4 DDR5-6400 Smart Memory Kit",
+    "category": "DDR5-6400 DIMM",
+    "hint": "128 GB DIMM",
     "slots": []
   },
   {
-    "id": -1897100615,
-    "code": "R4J11A",
-    "description": "300 kW NA cabinet",
-    "category": "olympus cabinet",
-    "hint": "",
-    "slots": [
-      "compute blades"
-    ]
-  },
-  {
-    "id": -1897067848,
-    "code": "R4K44A",
-    "description": "slingshot 200 GB Dual Port Mezzanine",
-    "category": "slingshot",
-    "hint": "",
+    "id": -519107740,
+    "code": "P64987-H21",
+    "description": "HPE 96GB Dual Rank x4 DDR5-6400 Smart Memory Kit",
+    "category": "DDR5-6400 DIMM",
+    "hint": "96 GB DIMM",
     "slots": []
   },
   {
-    "id": -1897066949,
-    "code": "R4K52A",
-    "description": "slingshot L0 cable C",
-    "category": "slingshot",
-    "hint": "",
-    "slots": []
-  },
-  {
-    "id": -1895135184,
-    "code": "R6N07A",
-    "description": "32GB DDR4-3200 2RX4",
-    "category": "DDR4 3200 MHz",
-    "hint": "",
-    "slots": []
-  },
-  {
-    "id": -1897098569,
-    "code": "R4J35A",
-    "description": "system kit",
-    "category": "system",
-    "hint": "one per complex",
-    "slots": [
-      "mountain cabinets"
-    ]
-  },
-  {
-    "id": -1897068778,
-    "code": "R4K35A",
-    "description": "GPU Blade AMD nVidia",
-    "category": "compute blade",
-    "hint": "",
-    "slots": [
-      "AMD 2 CPU",
-      "16 x DDR4 3200 MHz "
-    ]
-  },
-  {
-    "id": -1897101390,
-    "code": "R4J07A",
-    "description": "200 kW NA cabinet",
-    "category": "olympus cabinet",
-    "hint": "200 kW olympus cabinet",
-    "slots": [
-      "compute blades"
-    ]
-  },
-  {
-    "id": -1897040909,
-    "code": "R4L15A",
-    "description": "AMD Milan 64 core 200W CPU",
-    "category": "AMD Milan CPU",
-    "hint": "",
+    "id": -833094949,
+    "code": "P73377-B21",
+    "description": "AMD EPYC 9575F 3.0GHz 64-core 320W Processor for HPE",
+    "category": "AMD Turin CPU",
+    "hint": "AMD 9575F 64c 3.0G 320W",
     "slots": []
   }
 ]

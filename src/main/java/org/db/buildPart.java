@@ -62,9 +62,7 @@ public class buildPart implements Serializable {
         parentId = id;
     }
 
-    int getBuildCount() {
-        return buildCount;
-    }
+    int getBuildCount() { return buildCount; }
 
     void setBuildCount(int count) {
         buildCount = count;

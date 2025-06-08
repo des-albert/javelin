@@ -1,36 +1,5 @@
 [
   {
-    "id": -1788853229,
-    "name": "compute blade L0 Cable A",
-    "type": "E",
-    "quantity": 2,
-    "description": "",
-    "parts": [
-      "R4K50A"
-    ]
-  },
-  {
-    "id": -1788853228,
-    "name": "compute blade L0 Cable B",
-    "type": "E",
-    "quantity": 2,
-    "description": "",
-    "parts": [
-      "R4K51A"
-    ]
-  },
-  {
-    "id": -1941713433,
-    "name": "16 x DDR4 3200 MHz ",
-    "type": "E",
-    "quantity": 16,
-    "description": "DIMMS on GPU blade",
-    "parts": [
-      "R6N08A",
-      "R6N07A"
-    ]
-  },
-  {
     "id": 94094958,
     "name": "build",
     "type": "U",
@@ -39,73 +8,28 @@
     "parts": []
   },
   {
-    "id": 1221719908,
-    "name": "compute blades",
+    "id": 1281892406,
+    "name": "DDR5-6400 DIMMs",
     "type": "M",
-    "quantity": 64,
-    "description": "blades in olympus cabinet",
+    "quantity": 24,
+    "description": "DDR5-6400 DIMMs",
     "parts": [
-      "R4K33A"
+      "P64986-H21",
+      "P64987-H21",
+      "P64988-H21"
     ]
   },
   {
-    "id": 64542286,
-    "name": "Build",
-    "type": "U",
-    "quantity": 0,
-    "description": "",
-    "parts": []
-  },
-  {
-    "id": -1186579122,
-    "name": "mountain cabinets",
-    "type": "U",
-    "quantity": 0,
-    "description": "unlimited cabinets in system",
-    "parts": [
-      "R4J07A",
-      "R4J11A"
-    ]
-  },
-  {
-    "id": 721564952,
-    "name": "AMD 8 CPU",
-    "type": "E",
-    "quantity": 8,
-    "description": "CPUs for AMD Compute Blade",
-    "parts": [
-      "R4L15A"
-    ]
-  },
-  {
-    "id": 1269233980,
-    "name": "slingshot dual mezzanine card",
-    "type": "W",
-    "quantity": 2,
-    "description": "mezzanine cards for AMD compute blades",
-    "parts": [
-      "R4K44A"
-    ]
-  },
-  {
-    "id": 4033522,
-    "name": "64 x DDR4 3200 MHz",
-    "type": "E",
-    "quantity": 64,
-    "description": "DDR4 memory for compute blade",
-    "parts": [
-      "R6N07A",
-      "R6N08A"
-    ]
-  },
-  {
-    "id": 716023826,
-    "name": "AMD 2 CPU",
+    "id": -1649683723,
+    "name": "Turin CPUs",
     "type": "E",
     "quantity": 2,
-    "description": "CPUs on GPU blade",
+    "description": "AMD Turin CPUs for Cray XD 685",
     "parts": [
-      "R4L15A"
+      "P73357-B21",
+      "P73359-B21",
+      "P73377-B21",
+      "P73360-B21"
     ]
   }
 ]

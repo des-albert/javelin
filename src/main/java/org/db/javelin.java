@@ -118,8 +118,8 @@ public class javelin {
     }
 
     public void initialize() {
-        labelJDK.setText("Java SDK version " + Runtime.version());
-        labelJavaFX.setText("JavaFX version " + System.getProperties().get("javafx.runtime.version"));
+        labelJDK.setText("Java SDK version %s".formatted(Runtime.version()));
+        labelJavaFX.setText("JavaFX version %s".formatted(System.getProperties().get("javafx.runtime.version")));
 
         start();
         definePartsTreeView();
@@ -545,6 +545,7 @@ public class javelin {
             while (jsonReader.hasNext()) {
                 Part part = gson.fromJson(parseReader(jsonReader), Part.class);
                 partHashMap.put(part.getId(), part);
+                logger.info("addParts - hash %d %d part %s".formatted(part.getId(), part.getCode().hashCode(), part.getDescription()));
             }
             jsonReader.endArray();
 
@@ -554,11 +555,13 @@ public class javelin {
             while (jsonReader.hasNext()) {
                 Slot slot = gson.fromJson(parseReader(jsonReader), Slot.class);
                 slotHashMap.put(slot.getId(), slot);
+                logger.info("addSlots - hash %d %d part %s".formatted(slot.getId(), slot.getName().hashCode(), slot.getDescription()));
             }
-            jsonReader.endArray();fr.close();
+            jsonReader.endArray();
+            fr.close();
 
         } catch (IOException e) {
-            logger.error("addParts - " + e.getMessage());
+            logger.error("addParts - {}", e.getMessage());
         }
 
     }
@@ -611,7 +614,7 @@ public class javelin {
         if (object.getClass() == Part.class) {
             Part part = (Part) object;
             String image = part.getCategory();
-            String iconPath = "/img/" + image + ".png";
+            String iconPath = "/img/%s.png".formatted(image);
             InputStream iconStream = getClass().getResourceAsStream(iconPath);
             if (iconStream != null) {
                 Image icon = new Image(iconStream);
@@ -786,7 +789,7 @@ public class javelin {
             gson.toJson(jsonArray, fw);
             fw.close();
         } catch (IOException e) {
-            logger.error("writeHashMap - " + e.getMessage());
+            logger.error("writeHashMap - {}", e.getMessage());
         }
     }
 
@@ -817,7 +820,7 @@ public class javelin {
 
 
         } catch (IOException e) {
-            logger.error("Save Config - " + e.getMessage());
+            logger.error("Save Config - {}", e.getMessage());
         }
     }
 
@@ -859,7 +862,7 @@ public class javelin {
             fr.close();
 
         } catch (IOException e) {
-            logger.error("LoadConfig - " + e.getMessage());
+            logger.error("LoadConfig - {}", e.getMessage());
         }
     }
 
@@ -869,7 +872,7 @@ public class javelin {
             buildPart part;
             buildSlot slot;
             while ((line = br.readLine()) != null && !line.isEmpty()) {
-                if (line.startsWith("code", 2)) {
+                if (line.contains("code")) {
                     part = gson.fromJson(line, buildPart.class);
 
                     if (part.getCode().equals("build")) {
@@ -896,7 +899,7 @@ public class javelin {
 
             }
         } catch (IOException e) {
-            logger.error("readTree - " + e.getMessage());
+            logger.error("readTree - {}", e.getMessage());
         }
     }
 
@@ -924,7 +927,7 @@ public class javelin {
             }
 
         } catch (IOException e) {
-            logger.error("Export - " + e.getMessage());
+            logger.error("Export - {}", e.getMessage());
         }
     }
 

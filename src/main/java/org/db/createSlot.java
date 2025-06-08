@@ -38,7 +38,7 @@ public class createSlot {
         }
 
         if (partHashMap.containsKey(name.hashCode())) {
-            labelCreateSlotStatus.setText("duplicate slot name " + name);
+            labelCreateSlotStatus.setText("duplicate slot name %s".formatted(name));
             labelCreateSlotStatus.setStyle("-fx-text-fill: status-error-color");
             return;
         }
@@ -57,7 +57,7 @@ public class createSlot {
         slotList.add(name);
 
         partHashMap.replace(id, part);
-        labelCreateSlotStatus.setText("Slot " + name + " created");
+        labelCreateSlotStatus.setText("Slot %s created".formatted(name));
         labelCreateSlotStatus.setStyle("-fx-text-fill: status-good-color");
 
     }
