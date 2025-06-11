@@ -50,7 +50,7 @@ public class changeQty {
 
     }
 
-    private void updateTree(TreeItem<Object> item, HashMap<Integer, TreeItem<Object>> map, int next, int prev) {
+    private void updateTree(TreeItem<Object> item, HashMap<String, TreeItem<Object>> map, int next, int prev) {
         updateTotal(item, next, prev);
 
         for (TreeItem<Object> child : item.getChildren()) {

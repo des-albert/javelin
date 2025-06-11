@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Part implements Serializable {
 
-    private final int id;
     private final String code;
     private final String description;
     private final String category;
@@ -13,7 +12,6 @@ public class Part implements Serializable {
     private final ArrayList<String> slots;
 
     Part(String code, String description, String category, String hint, ArrayList<String> slots) {
-        this.id = code.hashCode();
         this.code = code;
         this.category = category;
         this.description = description;
@@ -21,7 +19,6 @@ public class Part implements Serializable {
         this.slots = slots;
     }
 
-    int getId() { return id; }
     String getCode() { return code; }
     String getDescription() {return description; }
     String getHint() {return hint; }

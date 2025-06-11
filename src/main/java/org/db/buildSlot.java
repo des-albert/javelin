@@ -10,24 +10,20 @@ public class buildSlot implements Serializable {
     private final int quantity;
     private final String description;
     private final ArrayList<String> parts;
-    private final int id;
-    private int parentId;
+    private String parent;
     private int content;
 
     buildSlot(Slot slot) {
-        id = slot.getId();
+
         name = slot.getName();
         type = slot.getType();
         quantity = slot.getQuantity();
         description = slot.getDescription();
         parts = slot.getParts();
-        parentId = 0;
+        parent = "";
         content = 0;
     }
 
-    int getId() {
-        return id;
-    }
 
     String getName() {
         return name;
@@ -35,10 +31,6 @@ public class buildSlot implements Serializable {
 
     String getType() {
         return type;
-    }
-
-    String getDescription() {
-        return description;
     }
 
     int getQuantity() {
@@ -57,12 +49,12 @@ public class buildSlot implements Serializable {
         content = quantity;
     }
 
-    int getParentId() {
-        return parentId;
+    String getParent() {
+        return parent;
     }
 
-    void setParentId(int id) {
-        parentId = id;
+    void setParent(String item) {
+        parent = item;
     }
 }
 

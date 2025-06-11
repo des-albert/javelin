@@ -16,7 +16,6 @@
     -fx-font-size: 48;
     -fx-base: rgba(60, 63, 65, 255);
 }
-
 .label-red {
     -fx-text-fill: Red;
     -fx-font-family: 'Ink Free';

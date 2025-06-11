@@ -6,8 +6,9 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static org.db.javelin.*;
-
+import static org.db.javelin.partHashMap;
+import static org.db.javelin.slotHashMap;
+import static org.db.javelin.selectedTreeItem;
 
 public class createSlot {
     @FXML
@@ -37,7 +38,7 @@ public class createSlot {
             return;
         }
 
-        if (partHashMap.containsKey(name.hashCode())) {
+        if (slotHashMap.containsKey(name)) {
             labelCreateSlotStatus.setText("duplicate slot name %s".formatted(name));
             labelCreateSlotStatus.setStyle("-fx-text-fill: status-error-color");
             return;
@@ -49,14 +50,14 @@ public class createSlot {
             count = Integer.parseInt(textFieldSlotCount.getText());
         ArrayList<String> parts = new ArrayList<>();
         Slot newSlot = new Slot(name, type, count, description, parts);
-        slotHashMap.put(newSlot.getId(), newSlot);
+        slotHashMap.put(newSlot.getName(), newSlot);
         Part select = (Part) selectedTreeItem.getValue();
-        int id = select.getId();
-        Part part = partHashMap.get(id);
+
+        Part part = partHashMap.get(select.getCode());
         ArrayList<String> slotList = part.getSlots();
         slotList.add(name);
 
-        partHashMap.replace(id, part);
+        partHashMap.replace(select.getCode(), part);
         labelCreateSlotStatus.setText("Slot %s created".formatted(name));
         labelCreateSlotStatus.setStyle("-fx-text-fill: status-good-color");
 

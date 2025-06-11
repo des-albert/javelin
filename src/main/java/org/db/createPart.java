@@ -41,11 +41,11 @@ public class createPart {
 
         ArrayList<String> slots = new ArrayList<>();
         Part newPart = new Part(code, description, category, hint, slots);
-        if (partHashMap.containsKey(newPart.hashCode())) {
+        if (partHashMap.containsKey(newPart.getCode())) {
             labelAddStatus.setText("Duplicate part code %s".formatted(code));
             labelAddStatus.setStyle("-fx-text-fill: status-error-color");
         } else {
-            partHashMap.put(code.hashCode(), newPart);
+            partHashMap.put(code, newPart);
             labelAddStatus.setText("New Part %s - %s created".formatted(code, description));
             labelAddStatus.setStyle("-fx-text-fill: status-good-color");
         }

@@ -14,8 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.*;
@@ -26,16 +26,16 @@ import static org.db.javelinMain.getPrimaryStage;
 
 public class javelin {
 
-    static HashMap<Integer, Part> partHashMap = new HashMap<>();
-    static HashMap<Integer, Slot> slotHashMap = new HashMap<>();
-    static HashMap<Integer, TreeItem<Object>> buildHashMap = new HashMap<>();
+    static HashMap<String, Part> partHashMap = new HashMap<>();
+    static HashMap<String, Slot> slotHashMap = new HashMap<>();
+    static HashMap<String, TreeItem<Object>> buildHashMap = new HashMap<>();
     static TreeItem<Object> selectedTreeItem;
     private final HashMap<String, TreeItem<Object>> catHashMap = new HashMap<>();
     private final ContextMenu partContext = new ContextMenu();
     private final ContextMenu folderContext = new ContextMenu();
     private final ContextMenu quantityContext = new ContextMenu();
 
-    private static final Logger logger = LogManager.getLogger(javelin.class);
+    private static final Logger logger = LoggerFactory.getLogger(javelin.class);
 
     @FXML
     Button buttonQuit;
@@ -151,7 +151,7 @@ public class javelin {
 
         /* Cell Factory for Parts treeView */
 
-        treeViewPart.setCellFactory(cellData -> {
+        treeViewPart.setCellFactory(_ -> {
             final Tooltip tooltip = new Tooltip();
             TreeCell<Object> cell = new TreeCell<>() {
                 @Override
@@ -220,7 +220,7 @@ public class javelin {
 
                         if (!slot.getParts().contains(code)) {
                             slot.getParts().add(code);
-                            slotHashMap.replace(slot.getId(), slot);
+                            slotHashMap.replace(slot.getName(), slot);
                             loadPartTree();
                             labelStatus.setText("part " + code + " added to slot " + slot.getName());
                             labelStatus.getStyleClass().removeFirst();
@@ -236,7 +236,7 @@ public class javelin {
                         Part part = (Part) object;
                         if (!part.getSlots().contains(slot.getName())) {
                             part.getSlots().add(slot.getName());
-                            partHashMap.replace(part.getId(), part);
+                            partHashMap.replace(part.getCode(), part);
                             loadPartTree();
                             labelStatus.setText("slot " + slot + " added to part " + part.getCode());
                             labelStatus.getStyleClass().removeFirst();
@@ -291,7 +291,7 @@ public class javelin {
 
                     if (slotParts.contains(code)) {
                         slotParts.remove(code);
-                        slotHashMap.replace(slot.getId(), slot);
+                        slotHashMap.replace(slot.getName(), slot);
                         loadPartTree();
                     }
 
@@ -306,7 +306,7 @@ public class javelin {
 
                     Part part = (Part) event.getDragboard().getContent(dfPart);
                     String code = part.getCode();
-                    partHashMap.remove(code.hashCode());
+                    partHashMap.remove(code);
 
                     /* Remove part from containing slots */
 
@@ -314,7 +314,7 @@ public class javelin {
                         if (slot.getParts().contains(code)) {
                             ArrayList<String> slotParts = slot.getParts();
                             slotParts.remove(code);
-                            slotHashMap.replace(slot.getId(), slot);
+                            slotHashMap.replace(slot.getName(), slot);
                         }
                     }
                     loadPartTree();
@@ -327,7 +327,7 @@ public class javelin {
                 Slot slot = (Slot) event.getDragboard().getContent(dfSlot);
                 Part part = (Part) event.getDragboard().getContent(dfParentPart);
                 ArrayList<String> partSlots = part.getSlots();
-                partSlots.remove(slot.getId());
+                partSlots.remove(slot.getName());
                 loadPartTree();
 
 
@@ -336,10 +336,10 @@ public class javelin {
             } else if (event.getDragboard().hasContent(dfBuild)) {
                 buildPart part = (buildPart) event.getDragboard().getContent(dfBuild);
                 buildSlot slot = (buildSlot) event.getDragboard().getContent(dfParentSlot);
-                TreeItem<Object> parentItem = buildHashMap.get(slot.getId());
-                TreeItem<Object> partItem = buildHashMap.get(part.getId());
+                TreeItem<Object> parentItem = buildHashMap.get(slot.getName());
+                TreeItem<Object> partItem = buildHashMap.get(part.getCode());
                 parentItem.getChildren().remove(partItem);
-                buildHashMap.remove(part.getId());
+                buildHashMap.remove(part.getCode());
 
                 labelStatus.setText(slot.getContent() + " parts removed from slot " + slot.getName());
                 labelStatus.getStyleClass().removeFirst();
@@ -360,7 +360,7 @@ public class javelin {
 
         ArrayList<String> parts = new ArrayList<>();
         Slot buildSlot = new Slot("build", "U", 0, "", parts);
-        slotHashMap.put("build".hashCode(), buildSlot);
+        slotHashMap.put("build", buildSlot);
         ArrayList<String> slots = new ArrayList<>();
         slots.add("build");
         buildPart buildPart = new buildPart("build", "build", "", slots);
@@ -371,7 +371,7 @@ public class javelin {
 
         /* Cell Factory for Build treeView */
 
-        treeViewBuild.setCellFactory(cellData -> {
+        treeViewBuild.setCellFactory(_ -> {
             final Tooltip tooltip = new Tooltip();
             TreeCell<Object> cell = new TreeCell<>() {
                 @Override
@@ -407,7 +407,7 @@ public class javelin {
                             toolText.append(slot.getContent());
                             toolText.append("\n");
                             for (String code : parts) {
-                                Part p = partHashMap.get(code.hashCode());
+                                Part p = partHashMap.get(code);
                                 toolText.append(p.getDescription());
                                 toolText.append("\n");
                             }
@@ -445,18 +445,18 @@ public class javelin {
                         buildPart addPart = new buildPart(part);
                         addPart.setBuildCount(addQty);
                         addPart.setTotalCount(addQty);
-                        addPart.setParentId(targetPart.getId());
+                        addPart.setParent(targetPart.getCode());
                         TreeItem<Object> partTreeItem = newTreeItem(addPart);
-                        buildHashMap.put(addPart.getId(), partTreeItem);
+                        buildHashMap.put(addPart.getCode(), partTreeItem);
                         buildTreeRootItem.getChildren().add(partTreeItem);
 
                         if (!addPart.getSlots().isEmpty()) {
                             for (String slotName : addPart.getSlots()) {
-                                Slot slot = slotHashMap.get(slotName.hashCode());
+                                Slot slot = slotHashMap.get(slotName);
                                 buildSlot addSlot = new buildSlot(slot);
-                                addSlot.setParentId(addPart.getId());
+                                addSlot.setParent(addPart.getCode());
                                 TreeItem<Object> slotTreeItem = newTreeItem(addSlot);
-                                buildHashMap.put(addSlot.getId(), slotTreeItem);
+                                buildHashMap.put(addSlot.getName(), slotTreeItem);
                                 partTreeItem.getChildren().add(slotTreeItem);
                             }
                         }
@@ -500,20 +500,20 @@ public class javelin {
                                     buildPart targetPart = (buildPart) target.getParent().getValue();
                                     addPart.setTotalCount(targetPart.getTotalCount() * addQty);
                                     targetSlot.setContent(currentQty + addQty);
-                                    addPart.setParentId(targetSlot.getId());
+                                    addPart.setParent(targetSlot.getName());
                                     TreeItem<Object> partTreeItem = newTreeItem(addPart);
-                                    buildHashMap.put(addPart.getId(), partTreeItem);
+                                    buildHashMap.put(addPart.getCode(), partTreeItem);
                                     target.getChildren().add(partTreeItem);
 
                                     /* Add slots to new part */
 
                                     if (!addPart.getSlots().isEmpty()) {
                                         for (String slotName : addPart.getSlots()) {
-                                            Slot slot = slotHashMap.get(slotName.hashCode());
+                                            Slot slot = slotHashMap.get(slotName);
                                             buildSlot addSlot = new buildSlot(slot);
-                                            addSlot.setParentId(addPart.getId());
+                                            addSlot.setParent(addPart.getCode());
                                             TreeItem<Object> slotTreeItem = newTreeItem(addSlot);
-                                            buildHashMap.put(addSlot.getId(), slotTreeItem);
+                                            buildHashMap.put(addSlot.getName(), slotTreeItem);
                                             partTreeItem.getChildren().add(slotTreeItem);
                                         }
                                     }
@@ -544,8 +544,8 @@ public class javelin {
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
                 Part part = gson.fromJson(parseReader(jsonReader), Part.class);
-                partHashMap.put(part.getId(), part);
-                logger.info("addParts - hash %d %d part %s".formatted(part.getId(), part.getCode().hashCode(), part.getDescription()));
+                partHashMap.put(part.getCode(), part);
+                // logger.info("addParts - %s part %s".formatted(part.getCode(),  part.getDescription()));
             }
             jsonReader.endArray();
 
@@ -554,8 +554,8 @@ public class javelin {
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
                 Slot slot = gson.fromJson(parseReader(jsonReader), Slot.class);
-                slotHashMap.put(slot.getId(), slot);
-                logger.info("addSlots - hash %d %d part %s".formatted(slot.getId(), slot.getName().hashCode(), slot.getDescription()));
+                slotHashMap.put(slot.getName(), slot);
+                // logger.info("addSlots - %s part %s".formatted( slot.getName(), slot.getDescription()));
             }
             jsonReader.endArray();
             fr.close();
@@ -590,7 +590,7 @@ public class javelin {
 
             if (!part.getSlots().isEmpty()) {
                 for (String item : part.getSlots()) {
-                    if ((slot = slotHashMap.get(item.hashCode())) != null) {
+                    if ((slot = slotHashMap.get(item)) != null) {
                         TreeItem<Object> slotItem = newTreeItem(slot);
                         leafItem.getChildren().add(slotItem);
 
@@ -598,7 +598,7 @@ public class javelin {
 
                         if (!slot.getParts().isEmpty()) {
                             for (String code : slot.getParts()) {
-                                Part slotPart = partHashMap.get(code.hashCode());
+                                Part slotPart = partHashMap.get(code);
                                 TreeItem<Object> slotPartItem = newTreeItem(slotPart);
                                 slotItem.getChildren().add(slotPartItem);
                             }
@@ -646,13 +646,13 @@ public class javelin {
         /*  Create new part context menu */
 
         MenuItem newPart = new MenuItem("create part");
-        newPart.setOnAction(e -> {
+        newPart.setOnAction(_ -> {
             selectedTreeItem = treeViewPart.getSelectionModel().getSelectedItem();
             try {
                 FXMLLoader fxmlFormLoader = new FXMLLoader(getClass().getResource("createPart.fxml"));
                 Parent partForm = fxmlFormLoader.load();
                 Stage partStage = new Stage();
-                partStage.setOnHiding(event -> loadPartTree());
+                partStage.setOnHiding(_ -> loadPartTree());
                 partStage.setTitle("Create New Part");
                 partStage.setScene(new Scene(partForm));
                 partStage.show();
@@ -666,13 +666,13 @@ public class javelin {
         /*  Create new slot context menu */
 
         MenuItem newSlot = new MenuItem("create slot");
-        newSlot.setOnAction(e -> {
+        newSlot.setOnAction(_ -> {
             selectedTreeItem = treeViewPart.getSelectionModel().getSelectedItem();
             try {
                 FXMLLoader fxmlFormLoader = new FXMLLoader(getClass().getResource("createSlot.fxml"));
                 Parent slotForm = fxmlFormLoader.load();
                 Stage slotStage = new Stage();
-                slotStage.setOnHiding(event -> loadPartTree());
+                slotStage.setOnHiding(_ -> loadPartTree());
                 slotStage.setTitle("create new slot");
                 slotStage.setScene(new Scene(slotForm));
                 slotStage.show();
@@ -687,13 +687,13 @@ public class javelin {
         /*  Create Build Part context menu */
 
         MenuItem partQty = new MenuItem("change quantity");
-        partQty.setOnAction(e -> {
+        partQty.setOnAction(_ -> {
             selectedTreeItem = treeViewBuild.getSelectionModel().getSelectedItem();
             try {
                 FXMLLoader fxmlFormLoader = new FXMLLoader(getClass().getResource("changeQty.fxml"));
                 Parent qtyForm = fxmlFormLoader.load();
                 Stage qtyStage = new Stage();
-                qtyStage.setOnHiding(event -> loadBuildTree());
+                qtyStage.setOnHiding(_ -> loadBuildTree());
                 qtyStage.setTitle("change part quantity");
                 qtyStage.setScene(new Scene(qtyForm));
                 qtyStage.show();
@@ -770,7 +770,7 @@ public class javelin {
         writeHashMap(slotHashMap, "slots.json");
     }
 
-    private void writeHashMap(HashMap<Integer, ?> map, String filename) {
+    private void writeHashMap(HashMap<String, ?> map, String filename) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File file = new File(filename);
         try {
@@ -877,13 +877,13 @@ public class javelin {
 
                     if (part.getCode().equals("build")) {
                         buildTreeRootItem = new TreeItem<>(part);
-                        buildHashMap.put(part.getId(), buildTreeRootItem);
+                        buildHashMap.put(part.getCode(), buildTreeRootItem);
                         treeViewBuild.setRoot(buildTreeRootItem);
                         treeViewBuild.setShowRoot(true);
                     } else {
                         TreeItem<Object> partItem = newTreeItem(part);
-                        buildHashMap.put(part.getId(), partItem);
-                        TreeItem<Object> parentItem = buildHashMap.get(part.getParentId());
+                        buildHashMap.put(part.getCode(), partItem);
+                        TreeItem<Object> parentItem = buildHashMap.get(part.getParent());
                         parentItem.getChildren().add(partItem);
                     }
 
@@ -892,8 +892,8 @@ public class javelin {
                 } else {
                     slot = gson.fromJson(line, buildSlot.class);
                     TreeItem<Object> slotItem = newTreeItem(slot);
-                    buildHashMap.put(slot.getId(), slotItem);
-                    TreeItem<Object> parentItem = buildHashMap.get(slot.getParentId());
+                    buildHashMap.put(slot.getName(), slotItem);
+                    TreeItem<Object> parentItem = buildHashMap.get(slot.getParent());
                     parentItem.getChildren().add(slotItem);
                 }
 
