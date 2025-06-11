@@ -8,6 +8,7 @@ public class buildSlot implements Serializable {
     private final String name;
     private final String type;
     private final int quantity;
+    private final String description;
     private final ArrayList<String> parts;
     private String parent;
     private int content;
@@ -17,7 +18,7 @@ public class buildSlot implements Serializable {
         name = slot.getName();
         type = slot.getType();
         quantity = slot.getQuantity();
-        String description = slot.getDescription();
+        description = slot.getDescription();
         parts = slot.getParts();
         parent = "";
         content = 0;
@@ -34,6 +35,10 @@ public class buildSlot implements Serializable {
 
     int getQuantity() {
         return quantity;
+    }
+
+    String getDescription() {
+        return description;
     }
 
     ArrayList<String> getParts() {
