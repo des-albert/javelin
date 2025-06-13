@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.*?>
 
 
+<?import javafx.geometry.Insets?>
 <AnchorPane prefHeight="271.0" prefWidth="550.0" styleClass="root" stylesheets="@../../css/style.css"
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.db.createPart">
     <Label layoutX="41.0" layoutY="33.0" prefHeight="26.0" prefWidth="130.0" styleClass="label-blue"
@@ -23,4 +24,9 @@
     <Button fx:id="buttonAddPart" layoutX="388.0" layoutY="46.0" mnemonicParsing="false"
             onAction="#ButtonAddPartAction" prefHeight="42.0" prefWidth="92.0" styleClass="label-blue"
             stylesheets="@../../css/style.css" text="Add"/>
+    <ToggleButton fx:id="toggle0D1" layoutX="40.0" layoutY="242.0" mnemonicParsing="false" onAction="#toggle0D1Action" prefHeight="31.0" prefWidth="36.0" text="0D1">
+        <padding>
+            <Insets bottom="5.0" />
+        </padding>
+    </ToggleButton>
 </AnchorPane>

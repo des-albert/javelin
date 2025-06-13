@@ -11,11 +11,12 @@
     -fx-base: rgba(60, 63, 65, 255);
 }
 .label-title {
-    -fx-text-fill: Blue;
+    -fx-text-fill: Orange;
     -fx-font-family: 'Ink Free';
     -fx-font-size: 48;
     -fx-base: rgba(60, 63, 65, 255);
 }
+
 .label-red {
     -fx-text-fill: Red;
     -fx-font-family: 'Ink Free';

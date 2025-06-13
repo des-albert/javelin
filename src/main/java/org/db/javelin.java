@@ -24,6 +24,10 @@ import java.util.*;
 import static com.google.gson.JsonParser.parseReader;
 import static org.db.javelinMain.getPrimaryStage;
 
+class Params {
+    String product;
+}
+
 public class javelin {
 
     static HashMap<String, Part> partHashMap = new HashMap<>();
@@ -42,7 +46,7 @@ public class javelin {
     @FXML
     TabPane tabPaneMain;
     @FXML
-    Label labelStatus, labelJDK, labelJavaFX;
+    Label labelStatus, labelJDK, labelJavaFX, labelFileStatus;
     @FXML
     TreeView<Object> treeViewPart, treeViewBuild;
     @FXML
@@ -51,6 +55,10 @@ public class javelin {
     ToggleButton togglePart, toggleBuild;
     private TreeItem<Object> partTreeRootItem, buildTreeRootItem;
     private DataFormat dfPart, dfSlot, dfBuild, dfParentPart, dfParentSlot;
+
+    private String partsFile;
+    private String slotsFile;
+
 
     @FXML
     private void partDragDetected(MouseEvent event) {
@@ -358,12 +366,10 @@ public class javelin {
 
     private void defineBuildTreeView() {
 
-        ArrayList<String> parts = new ArrayList<>();
-        Slot buildSlot = new Slot("build", "U", 0, "", parts);
-        slotHashMap.put("build", buildSlot);
+
         ArrayList<String> slots = new ArrayList<>();
         slots.add("build");
-        buildPart buildPart = new buildPart("build", "build", "", slots);
+        buildPart buildPart = new buildPart("build", "build", "", slots, false);
 
         buildTreeRootItem = new TreeItem<>(buildPart);
         treeViewBuild.setRoot(buildTreeRootItem);
@@ -539,8 +545,22 @@ public class javelin {
     private void addParts() {
         Gson gson = new Gson();
         try {
-            FileReader fr = new FileReader("parts.json");
+            FileReader fr = new FileReader("settings.json");
             JsonReader jsonReader = new JsonReader(fr);
+            jsonReader.beginArray();
+
+            while (jsonReader.hasNext()) {
+                Params settings = gson.fromJson(parseReader(jsonReader), Params.class);
+                partsFile = "json/products/" + settings.product + "/parts.json";
+                slotsFile = "json/products/" + settings.product + "/slots.json";
+            }
+            jsonReader.endArray();
+            jsonReader.close();
+            fr.close();
+
+
+            fr = new FileReader(partsFile);
+            jsonReader = new JsonReader(fr);
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
                 Part part = gson.fromJson(parseReader(jsonReader), Part.class);
@@ -549,7 +569,7 @@ public class javelin {
             }
             jsonReader.endArray();
 
-            fr = new FileReader("slots.json");
+            fr = new FileReader(slotsFile);
             jsonReader = new JsonReader(fr);
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
@@ -766,8 +786,8 @@ public class javelin {
     /* Save parts and slots */
 
     private void saveParts() {
-        writeHashMap(partHashMap, "parts.json");
-        writeHashMap(slotHashMap, "slots.json");
+        writeHashMap(partHashMap, partsFile);
+        writeHashMap(slotHashMap, slotsFile);
     }
 
     private void writeHashMap(HashMap<String, ?> map, String filename) {
@@ -799,20 +819,23 @@ public class javelin {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("json file (*.json)", "*.json"));
         fileChooser.setTitle("save json file");
         File jsonFile = fileChooser.showSaveDialog(getPrimaryStage());
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonArray jsonArray = new JsonArray();
         try {
             if (jsonFile.exists()) {
                 if (!jsonFile.delete()) {
-                    labelStatus.setText("file delete error " + jsonFile);
-                    labelStatus.getStyleClass().removeFirst();
-                    labelStatus.getStyleClass().addFirst("label-failure");
+                    labelFileStatus.setText("file delete error " + jsonFile);
+                    labelFileStatus.getStyleClass().removeFirst();
+                    labelFileStatus.getStyleClass().addFirst("label-failure");
                 }
             }
             if (jsonFile.createNewFile()) {
 
+                addTreeItemsToJsonArray(buildTreeRootItem, jsonArray, gson);
+
                 FileWriter fw = new FileWriter(jsonFile);
                 BufferedWriter bw = new BufferedWriter(fw);
-                saveTree(buildTreeRootItem, bw, gson);
+                gson.toJson(jsonArray, bw);
 
                 bw.close();
                 fw.close();
@@ -824,24 +847,17 @@ public class javelin {
         }
     }
 
-    private void saveTree(TreeItem<Object> item, BufferedWriter bw, Gson gs) {
+    private void addTreeItemsToJsonArray(TreeItem<Object> item, JsonArray jsonArray, Gson gson) {
         try {
-            String json = gs.toJson(item.getValue());
-            bw.write(json);
-            bw.newLine();
-            for (TreeItem<Object> cp : item.getChildren()) {
-                if (cp.getChildren().isEmpty()) {
-                    json = gs.toJson(cp.getValue());
-                    bw.write(json);
-                    bw.newLine();
-                } else
-                    saveTree(cp, bw, gs);
+            JsonElement jsonElement = gson.toJsonTree(item.getValue());
+            jsonArray.add(jsonElement);
+
+            for (TreeItem<Object> childItem : item.getChildren()) {
+                addTreeItemsToJsonArray(childItem, jsonArray, gson);
             }
 
-        } catch (IOException ex) {
-            labelStatus.setText(ex.getMessage());
-            labelStatus.getStyleClass().removeFirst();
-            labelStatus.getStyleClass().addFirst("label-failure");
+        } catch (Exception ex) {
+            logger.error("Save Tree - {}", ex.getMessage());
         }
     }
 
@@ -867,14 +883,19 @@ public class javelin {
     }
 
     private void readTree(BufferedReader br, Gson gson) {
-        String line;
-        try {
-            buildPart part;
-            buildSlot slot;
-            while ((line = br.readLine()) != null && !line.isEmpty()) {
-                if (line.contains("code")) {
-                    part = gson.fromJson(line, buildPart.class);
+        buildTreeRootItem.getChildren().clear();
+        buildHashMap.clear();
 
+        try {
+            JsonReader jsonReader = new JsonReader(br);
+            jsonReader.beginArray();
+
+            while (jsonReader.hasNext()) {
+                JsonElement jsonElement = JsonParser.parseReader(jsonReader);
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+                if (jsonObject.has("code")) {
+                    buildPart part = gson.fromJson(jsonObject, buildPart.class);
                     if (part.getCode().equals("build")) {
                         buildTreeRootItem = new TreeItem<>(part);
                         buildHashMap.put(part.getCode(), buildTreeRootItem);
@@ -890,7 +911,7 @@ public class javelin {
                     /* add Slots to Parts */
 
                 } else {
-                    slot = gson.fromJson(line, buildSlot.class);
+                    buildSlot slot = gson.fromJson(jsonObject, buildSlot.class);
                     TreeItem<Object> slotItem = newTreeItem(slot);
                     buildHashMap.put(slot.getName(), slotItem);
                     TreeItem<Object> parentItem = buildHashMap.get(slot.getParent());
@@ -912,15 +933,26 @@ public class javelin {
             File exportFile = fileChooser.showSaveDialog(getPrimaryStage());
             if (exportFile.exists())
                 if (!exportFile.delete())
-                    labelStatus.setText("file delete error");
+                    labelFileStatus.setText("file delete error");
+            labelFileStatus.getStyleClass().removeFirst();
+            labelFileStatus.getStyleClass().addFirst("label-failure");
+
             if (exportFile.createNewFile()) {
                 FileWriter fw = new FileWriter(exportFile);
                 BufferedWriter bw = new BufferedWriter(fw);
 
                 exportTree(buildTreeRootItem, exportHash);
                 for (Map.Entry<String, Integer> entry : exportHash.entrySet()) {
-                    bw.write(entry.getKey() + "," + entry.getValue());
+                    buildPart part = (buildPart) buildHashMap.get(entry.getKey()).getValue();
+                    String description = part.getDescription();
+                    Boolean od1 = part.getOd1();
+                    bw.write(entry.getValue().toString() + "," + entry.getKey() + "," + description);
                     bw.newLine();
+                    if (od1) {
+                        String code = String.format("%-13s", part.getCode()) + "0D1";
+                        bw.write(entry.getValue().toString() + "," + code + ",Factory Integrated");
+                        bw.newLine();
+                    }
                 }
                 bw.close();
                 fw.close();

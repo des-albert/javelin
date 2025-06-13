@@ -57,10 +57,9 @@
                        preserveRatio="true">
                 <Image url="@../../img/javelin.gif"/>
             </ImageView>
-            <Button layoutX="421.0" layoutY="81.0" mnemonicParsing="false" onAction="#ButtonSaveConfigOnAction"
-                    prefHeight="15.0" prefWidth="125.0" text="save"/>
-            <Button layoutX="421.0" layoutY="136.0" mnemonicParsing="false" onAction="#ButtonLoadConfigOnAction"
-                    prefHeight="45.0" prefWidth="124.0" text="load"/>
+            <Button layoutX="421.0" layoutY="81.0" mnemonicParsing="false" onAction="#ButtonSaveConfigOnAction" prefHeight="40.0" prefWidth="100.0" text="save" />
+            <Button layoutX="421.0" layoutY="136.0" mnemonicParsing="false" onAction="#ButtonLoadConfigOnAction" prefHeight="40.0" prefWidth="100.0" text="load" />
+            <Label fx:id="labelFileStatus" layoutX="130.0" layoutY="714.0" prefHeight="17.0" prefWidth="541.0" text="Label" />
         </AnchorPane>
     </Tab>
     <Tab text="About">
